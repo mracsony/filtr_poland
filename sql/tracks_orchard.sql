@@ -9,7 +9,7 @@ JOIN spotify.dim_partner_info dpi USING (partner_info_key)
 WHERE fs2.report_date = '2024-01-07'::date AND fs2.country_code_stream = '_COUNTRY_CODE_'
 GROUP BY 1
 ORDER BY total_streams DESC 
-LIMIT 200),
+LIMIT 500),
 
 orchard_lc AS (SELECT vrtd.isrc AS track_isrc,
 min(genre_name) AS _primary_genre

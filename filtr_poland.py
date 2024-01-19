@@ -193,7 +193,7 @@ if len(df_playlist) >= 0:
 playlist_id = '0Tt1VCYMzvK0KtKySr18So'
 h.refresh_spotify_conn()
 
-df_playlist = genres_df[(genres_df['edm']>30.0) | (genres_df['_track_uri'].str.contains('electro|edm', case=False, regex=True))][0:150]
+df_playlist = genres_df[(genres_df['edm']>20.0) | (genres_df['_track_uri'].str.contains('electro|edm', case=False, regex=True))][0:150]
 
 if len(df_playlist) >= 0:
     h.spotify_remove_all_tracks_from_playlist(playlist_id)

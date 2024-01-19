@@ -11,7 +11,7 @@ JOIN common.vw_products_genre vpg USING (product_key)
 WHERE fs2.report_date = '2024-01-07'::date AND fs2.country_code_stream = '_COUNTRY_CODE_'
 GROUP BY 1
 ORDER BY total_streams DESC 
-LIMIT 1000)
+LIMIT 5000)
 
 SELECT dpi.track_isrc,
 scs.segment_name,
