@@ -37,7 +37,7 @@ except:
     
     
     
-with open("sql/tracks_sme.sql", "r") as file:
+with open("/home/ca-polandsys/filtr_poland/sql/tracks_sme.sql", "r") as file:
     tracks_sme_sql = file.read()
     
     
@@ -47,7 +47,7 @@ tracks_sme_df = h.query_sql(tracks_sme_sql)
 tracks_sme_df['feed'] = 'SME'
 
 
-with open("sql/tracks_orchard.sql", "r") as file:
+with open("/home/ca-polandsys/filtr_poland/sql/tracks_orchard.sql", "r") as file:
     tracks_orch_sql = file.read()
 
 tracks_orch_sql = tracks_orch_sql.replace('2024-01-07',spotify_max_date.strftime("%Y-%m-%d"))
@@ -57,7 +57,7 @@ tracks_orch_df['feed'] = 'ORCHARD'
 
 
 
-with open("sql/tiktok_sony.sql", "r") as file:
+with open("/home/ca-polandsys/filtr_poland/sql/tiktok_sony.sql", "r") as file:
     tiktok_sme_sql = file.read()
     
     
@@ -66,7 +66,7 @@ tiktok_sme_sql = tiktok_sme_sql.replace('_COUNTRY_CODE_',country_code)
 tiktok_sme_df = h.query_sql(tiktok_sme_sql)
 tiktok_sme_df['feed'] = 'SME'
 
-with open("sql/tiktok_orchard.sql", "r") as file:
+with open("/home/ca-polandsys/filtr_poland/sql/tiktok_orchard.sql", "r") as file:
     tiktok_orch_sql = file.read()
     
     
@@ -88,7 +88,7 @@ df_metadata = df_metadata.drop(columns=['segment_name','segment_streams'])
 
 combined_isrcs = ','.join(["'{}'".format(isrc) for isrc in df_metadata['track_isrc']])
 
-with open("sql/metadane_release_date.sql", "r") as file:
+with open("/home/ca-polandsys/filtr_poland/sql/metadane_release_date.sql", "r") as file:
     metadane_release_date_sql = file.read()
 
 metadane_release_date_sql = metadane_release_date_sql.replace('_ISRC_CD_',combined_isrcs)
@@ -306,7 +306,7 @@ try:
 except:
     next
 
-with open("sql/tracks_sme.sql", "r") as file:
+with open("/home/ca-polandsys/filtr_poland/sql/tracks_sme.sql", "r") as file:
     tracks_sme_sql = file.read()
     
     
@@ -316,7 +316,7 @@ tracks_sme_df = h.query_sql(tracks_sme_sql)
 tracks_sme_df['feed'] = 'SME'
 
 
-with open("sql/tracks_orchard.sql", "r") as file:
+with open("/home/ca-polandsys/filtr_poland/sql/tracks_orchard.sql", "r") as file:
     tracks_orch_sql = file.read()
 
 tracks_orch_sql = tracks_orch_sql.replace('2024-01-07',spotify_max_date.strftime("%Y-%m-%d"))
@@ -334,7 +334,7 @@ df_metadata = df_metadata.drop(columns=['segment_name','segment_streams'])
 
 combined_isrcs = ','.join(["'{}'".format(isrc) for isrc in df_metadata['track_isrc']])
 
-with open("sql/metadane_release_date.sql", "r") as file:
+with open("/home/ca-polandsys/filtr_poland/sql/metadane_release_date.sql", "r") as file:
     metadane_release_date_sql = file.read()
 
 metadane_release_date_sql = metadane_release_date_sql.replace('_ISRC_CD_',combined_isrcs)
@@ -397,7 +397,7 @@ try:
 except:
     next
 
-with open("sql/tracks_sme.sql", "r") as file:
+with open("/home/ca-polandsys/filtr_poland/sql/tracks_sme.sql", "r") as file:
     tracks_sme_sql = file.read()
     
     
@@ -407,7 +407,7 @@ tracks_sme_df = h.query_sql(tracks_sme_sql)
 tracks_sme_df['feed'] = 'SME'
 
 
-with open("sql/tracks_orchard.sql", "r") as file:
+with open("/home/ca-polandsys/filtr_poland/sql/tracks_orchard.sql", "r") as file:
     tracks_orch_sql = file.read()
 
 tracks_orch_sql = tracks_orch_sql.replace('2024-01-07',spotify_max_date.strftime("%Y-%m-%d"))
@@ -425,7 +425,7 @@ df_metadata = df_metadata.drop(columns=['segment_name','segment_streams'])
 
 combined_isrcs = ','.join(["'{}'".format(isrc) for isrc in df_metadata['track_isrc']])
 
-with open("sql/metadane_release_date.sql", "r") as file:
+with open("/home/ca-polandsys/filtr_poland/sql/metadane_release_date.sql", "r") as file:
     metadane_release_date_sql = file.read()
 
 metadane_release_date_sql = metadane_release_date_sql.replace('_ISRC_CD_',combined_isrcs)
