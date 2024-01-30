@@ -9,6 +9,62 @@ load_dotenv('/home/ca-polandsys/.env')
 
 
 
+
+def clean_string(input_string):
+    # Remove punctuation
+    cleaned_string = re.sub(r'[^\w\s]', '', input_string)
+
+    # Remove specific words
+    words_to_remove = ['of', 'and', 'or', 'feat', 'featuring','ft','the']
+    cleaned_string = ' '.join(word for word in cleaned_string.split() if word.lower() not in words_to_remove)
+
+    return cleaned_string
+
+def reorganize_dataframe(df):
+    # Function to clean and tokenize the '_track_artist' column
+    def clean_and_tokenize(artist):
+        # Remove common punctuation and convert to lowercase
+        artist = clean_string(artist.lower())
+        return set(artist.split(' '))
+
+    # Create a copy of the DataFrame to avoid modifying the original
+    df_copy = df.copy()
+    df_copy = df_copy.reset_index(drop=True)
+    df_copy = df_copy.reset_index()
+    
+    # Clean and tokenize the '_track_artist' column
+    df_copy['_track_artist_tokens'] = df_copy['_track_artist'].apply(clean_and_tokenize)
+
+    # Iterate through the DataFrame to check and shift rows
+    for i in range(0,len(df_copy)):
+        
+        
+        if i > 0:
+            current_tokens = df_copy.at[i, '_track_artist_tokens']
+            prev_tokens = df_copy.at[i - 1 , '_track_artist_tokens']
+
+
+            if current_tokens.intersection(prev_tokens):
+                df_copy.at[i, 'index'] = i + 2.5
+            else:
+                df_copy.at[i, 'index'] = i
+        else:
+            df_copy.at[i, 'index'] = i
+            
+    df_copy = df_copy.sort_values(by='index', ascending=True)
+    df_copy = df_copy.drop(['index'], axis=1)
+    
+    return df_copy
+
+
+
+
+
+
+
+
+
+
 country_code = 'PL'
 
 h.connect_to_rdb()
@@ -125,7 +181,10 @@ playlist_id = '7Le3oCnCpgDO0etNcbyTeM'
 h.refresh_spotify_conn()
 
 df_playlist = genres_df[0:150]
-
+for i in range(1,5):
+    df_playlist = reorganize_dataframe(df_playlist)
+    
+    
 if len(df_playlist) >= 0:
     h.spotify_remove_all_tracks_from_playlist(playlist_id)
     h.spotify_update_playlist_description(playlist_id,'Dane na dzien '+spotify_max_date.strftime("%Y-%m-%d"))
@@ -142,7 +201,10 @@ if len(df_playlist) >= 0:
 playlist_id = '7Le3oCnCpgDO0etNcbyTeM'
 
 df_playlist = genres_df[0:150]
-
+for i in range(1,5):
+    df_playlist = reorganize_dataframe(df_playlist)
+    
+    
 if len(df_playlist) >= 0:
     h.spotify_remove_all_tracks_from_playlist(playlist_id)
     h.spotify_update_playlist_description(playlist_id,'Dane na dzien '+spotify_max_date.strftime("%Y-%m-%d"))
@@ -159,7 +221,10 @@ if len(df_playlist) >= 0:
 playlist_id = '5QqmWfetEZ7IfMvyJycezG'
 
 df_playlist = genres_df[(genres_df['rap']>75.0) | genres_df['_track_uri'].str.contains('rap|hip-hop', case=False, regex=True)][0:150]
-
+for i in range(1,5):
+    df_playlist = reorganize_dataframe(df_playlist)
+    
+    
 if len(df_playlist) >= 0:
     h.spotify_remove_all_tracks_from_playlist(playlist_id)
     h.spotify_update_playlist_description(playlist_id,'Dane na dzien '+spotify_max_date.strftime("%Y-%m-%d"))
@@ -174,7 +239,10 @@ if len(df_playlist) >= 0:
 #Gram w grę – Top150 SME+O, ALL
 
 playlist_id = '4HIyk5bEmoPJVaXwhN3oJu'
-
+for i in range(1,5):
+    df_playlist = reorganize_dataframe(df_playlist)
+    
+    
 df_playlist = genres_df[(genres_df['edm']>25.0) | ((genres_df['rap']>55.0) & (genres_df['edm']>1.0)) | genres_df['_track_uri'].str.contains('rap|hip-hop|electro|edm', case=False, regex=True)][0:150]
 
 if len(df_playlist) >= 0:
@@ -194,7 +262,10 @@ playlist_id = '0Tt1VCYMzvK0KtKySr18So'
 h.refresh_spotify_conn()
 
 df_playlist = genres_df[(genres_df['edm']>20.0) | (genres_df['_track_uri'].str.contains('electro|edm', case=False, regex=True))][0:150]
-
+for i in range(1,5):
+    df_playlist = reorganize_dataframe(df_playlist)
+    
+    
 if len(df_playlist) >= 0:
     h.spotify_remove_all_tracks_from_playlist(playlist_id)
     h.spotify_update_playlist_description(playlist_id,'Dane na dzien '+spotify_max_date.strftime("%Y-%m-%d"))
@@ -212,7 +283,10 @@ playlist_id = '5wGiR9VtUNlfSGaqa7Wniw'
 
 cutoff_date = datetime.now() - timedelta(days=56)
 df_playlist = genres_df[genres_df['release_date'] <= cutoff_date][0:150]
-
+for i in range(1,5):
+    df_playlist = reorganize_dataframe(df_playlist)
+    
+    
 if len(df_playlist) >= 0:
     h.spotify_remove_all_tracks_from_playlist(playlist_id)
     h.spotify_update_playlist_description(playlist_id,'Dane na dzien '+spotify_max_date.strftime("%Y-%m-%d"))
@@ -279,7 +353,10 @@ playlist_id = '1Ubg6u4Z7zRRvqrjG1dMnw'
 df_no_duplicates = matched_pairs.drop_duplicates(subset='_track_uri')
 
 df_playlist = df_no_duplicates.sort_values(by='tt_creations', ascending=False)[0:150]
-
+for i in range(1,5):
+    df_playlist = reorganize_dataframe(df_playlist)
+    
+    
 
 if len(df_playlist) >= 0:
     h.spotify_remove_all_tracks_from_playlist(playlist_id)
@@ -368,7 +445,10 @@ genres_df.reset_index(drop=True,inplace=True)
 #Top Hity – Top150 SME+O, ALL
 
 playlist_id = '1e3G6ZlcQrqjoomu3sGZ0m'
-
+for i in range(1,5):
+    df_playlist = reorganize_dataframe(df_playlist)
+    
+    
 df_playlist = genres_df[0:150]
 
 if len(df_playlist) >= 0:
@@ -461,7 +541,10 @@ genres_df.reset_index(drop=True,inplace=True)
 playlist_id = '5kabOALXCjHfEps1U6dbPv'
 
 df_playlist = genres_df[0:150]
-
+for i in range(1,5):
+    df_playlist = reorganize_dataframe(df_playlist)
+    
+    
 if len(df_playlist) >= 0:
     h.spotify_remove_all_tracks_from_playlist(playlist_id)
     h.spotify_update_playlist_description(playlist_id,'Dane na dzien '+spotify_max_date.strftime("%Y-%m-%d"))
